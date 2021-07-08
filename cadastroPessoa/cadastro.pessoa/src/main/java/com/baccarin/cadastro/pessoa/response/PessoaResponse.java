@@ -1,10 +1,12 @@
 package com.baccarin.cadastro.pessoa.response;
 
+import com.baccarin.cadastro.pessoa.enumeration.Identificador;
 import com.baccarin.cadastro.pessoa.model.Pessoa;
 
 public class PessoaResponse {
 
 	private Pessoa pessoa;
+	
 	private String mensagem;
 	
 	public PessoaResponse() {

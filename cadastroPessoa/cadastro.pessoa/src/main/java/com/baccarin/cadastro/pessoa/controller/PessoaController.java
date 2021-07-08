@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.baccarin.cadastro.pessoa.enumeration.Identificador;
 import com.baccarin.cadastro.pessoa.model.*;
 import com.baccarin.cadastro.pessoa.repository.PessoaRepository;
 import com.baccarin.cadastro.pessoa.response.PessoaResponse;
@@ -28,12 +30,6 @@ public class PessoaController {
 		return pessoaRepository.findAll();
 	}
 
-	/*@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Pessoa cadastrar(@RequestBody Pessoa pessoa) {
-		return pessoaRepository.save(pessoa);
-	}*/
-
 	@PostMapping(produces = "application/json")
 	public ResponseEntity<PessoaResponse> createPessoa(@RequestBody Pessoa pessoa) {
 		Optional<Pessoa> txtIdentificador = pessoaRepository.findPessoaByIdentificador(pessoa.getIdentificador());
@@ -42,11 +38,16 @@ public class PessoaController {
 			response.setMensagem("Identificador deve ser único.");
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		} else {
-		
-			pessoaRepository.save(pessoa);
-			response.setPessoa(pessoa);
-			response.setMensagem("Success");
-			return new ResponseEntity<>(response, HttpStatus.CREATED);
+			if (pessoa.getIdentificador().length() != 11 && pessoa.getIdentificador().length() != 14) {
+				response.setMensagem("Identificador com tamanho inválido.");
+				return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+			}else {
+				pessoa.setTipoIdentificador(pessoa.getIdentificador().length() == 11 ? Identificador.CPF : Identificador.CNPJ);
+				pessoaRepository.save(pessoa);
+				response.setPessoa(pessoa);
+				response.setMensagem("Success");
+				return new ResponseEntity<>(response, HttpStatus.CREATED);	
+			}
 		}
 	}
 }
