@@ -25,11 +25,13 @@ public class PessoaController {
 	@Autowired
 	private PessoaRepository pessoaRepository;
 
+	// endpoint que ira listar todas as pessoas salta no banco
 	@GetMapping
 	public List<Pessoa> getPessoas() {
 		return pessoaRepository.findAll();
 	}
 
+	// endpoint que ira cadastrar uma pessoa nova
 	@PostMapping(produces = "application/json")
 	public ResponseEntity<PessoaResponse> createPessoa(@RequestBody Pessoa pessoa) {
 		Optional<Pessoa> txtIdentificador = pessoaRepository.findPessoaByIdentificador(pessoa.getIdentificador());
