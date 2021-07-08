@@ -32,6 +32,12 @@ public class PessoaController {
 	}
 
 	// endpoint que ira cadastrar uma pessoa nova
+	// para novos cadastros deve seguir essa estrutura de json
+	/*{
+	    "nome": "Nome Teste",
+	    "identificador": "00000000000"
+	}*/
+	
 	@PostMapping(produces = "application/json")
 	public ResponseEntity<PessoaResponse> createPessoa(@RequestBody Pessoa pessoa) {
 		Optional<Pessoa> txtIdentificador = pessoaRepository.findPessoaByIdentificador(pessoa.getIdentificador());
